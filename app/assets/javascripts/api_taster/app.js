@@ -1,3 +1,4 @@
+//= require 'api_taster/custom'
 var ApiTaster = {
 
   disableSubmitButton: function() {
