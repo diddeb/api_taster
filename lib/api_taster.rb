@@ -12,6 +12,9 @@ module ApiTaster
   mattr_accessor :global_params
   self.global_params = {}
 
+  mattr_accessor :global_headers
+  self.global_headers = {}
+
   def self.routes(&block)
     ApiTaster::RouteCollector.routes << block
   end
