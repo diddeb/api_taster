@@ -85,6 +85,7 @@ legend {
 }
 
 #show-api-response-div {
+  position: relative;
   pre {
     color: #fff;
   }
@@ -105,6 +106,30 @@ legend {
       &.name {
         text-align: right;
       }
+    }
+  }
+  #status-code-info {
+    position: absolute;
+    top: 30px;
+    right: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    color: #333;
+    text-transform: uppercase;
+    &.informational {
+      color: #3498db;
+    }
+    &.success {
+      color: #2ecc71;
+    }
+    &.redirection {
+      color: #95a5a6;
+    }
+    &.client-error {
+      color: #d35400;
+    }
+    &.server-error {
+      color: #e74c3c;
     }
   }
 }

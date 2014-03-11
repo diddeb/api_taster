@@ -83,10 +83,41 @@ $.fn.extend({
     });
   },
 
-  showNavTab: function(name) {
+  showNavTab: function(name, xhr) {
     $response = $(this);
     $response.find("ul.nav-tabs li").removeClass("active");
     $response.find("ul.nav-tabs li a#response-" + name).parent().show().addClass("active");
+
+    var code = xhr.status * 1,
+      $existingStatusCode = $("#status-code-info"),
+      codeClassification;
+
+    switch(true) {
+      case (code < 200):
+      codeClassification = 'informational';
+      break;
+      case (code < 300):
+      codeClassification = 'success';
+      break;
+      case (code < 400):
+      codeClassification = 'redirection';
+      break;
+      case (code < 500):
+      codeClassification = 'client-error';
+      break;
+      default:
+      codeClassification = 'server-error';
+      break;
+    }
+
+    var $statusCode = $("<div><span>HTTP " + code + "</span></div>")
+      .attr("id", "status-code-info")
+      .addClass(codeClassification);
+
+    if($existingStatusCode.size() > 0)
+      $existingStatusCode.replaceWith($statusCode);
+    else
+      $response.append($statusCode);
 
     $response.find("pre").hide();
 
@@ -150,13 +181,13 @@ jQuery(function($) {
     }
 
     ApiTaster.fillInInfoTab(
-      $("#show-api-response-div").showNavTab("info"),
+      $("#show-api-response-div").showNavTab("info", xhr),
       xhr
     );
 
     switch (ApiTaster.detectContentType(xhr)) {
       case "json":
-        $("#show-api-response-div").showNavTab("json").text(
+        $("#show-api-response-div").showNavTab("json", xhr).text(
           JSON.stringify(JSON.parse(xhr.responseText), null, 2)
         );
         break;
