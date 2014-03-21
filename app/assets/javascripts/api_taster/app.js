@@ -154,16 +154,35 @@ jQuery(function($) {
     ApiTaster.disableSubmitButton();
     ApiTaster.disableUrlParams();
 
-    window.ajax = $.ajax({
-      beforeSend: function(xhr) {
-        var headers = ApiTaster.headers;
-        for(var l = headers.length, i = 0; i < l; i ++)
-          xhr.setRequestHeader(headers[i].key, headers[i].value);
-      },
-      url: ApiTaster.getSubmitUrl($form),
-      type: $form.attr('method'),
-      data: $form.serialize()
-    }).complete(onComplete);
+    var setHeaders = function(xhr) {
+      var headers = ApiTaster.headers;
+      for(var l = headers.length, i = 0; i < l; i ++)
+        xhr.setRequestHeader(headers[i].key, headers[i].value);
+    };
+
+    if($("input[type='file']", e.target).size() > 0) {
+      $.ajax({
+        beforeSend: function(xhr) {
+          setHeaders(xhr);
+        },
+        url: ApiTaster.getSubmitUrl($form),
+        type: $form.attr('method'),
+        data: new FormData($form.get(0)),
+        async: true,
+        cache: false,
+        contentType: false,
+        processData: false,
+      }).complete(onComplete);
+    } else {
+      window.ajax = $.ajax({
+        beforeSend: function(xhr) {
+          setHeaders(xhr);
+        },
+        url: ApiTaster.getSubmitUrl($form),
+        type: $form.attr('method'),
+        data: $form.serialize()
+      }).complete(onComplete);
+    }
 
     ApiTaster.lastRequest = {};
     ApiTaster.lastRequest.startTime = Date.now();

@@ -20,7 +20,7 @@
   <% end %>
 
   <% @params.each do |param| %>
-    <form method="<%= @route[:verb] %>" action="<%= @route[:path] %>" class="well form-horizontal" data-remote="true">
+    <form method="<%= @route[:verb] %>" action="<%= @route[:path] %>" class="well form-horizontal">
 
       <% if param[:url_params].empty? && param[:post_params].empty? %>
         <div class="alert alert-info">
